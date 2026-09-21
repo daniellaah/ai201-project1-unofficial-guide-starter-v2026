@@ -1,6 +1,8 @@
 # The Unofficial Guide
 
-<!-- Replace this line with your name and which corpus you picked. -->
+**Author:** Bo Gao
+
+**Corpus:** `campus_life`
 
 > **This file is your submission.** Fill it in as you go — most sections get
 > written during the milestone that produces them, not at the end.
@@ -21,11 +23,14 @@
 
 ## What This Does
 
-<!-- Three or four sentences. Which corpus you picked, and the kinds of
-     questions your system answers. Write it for someone who has never seen
-     this repo.
-
-     Milestone 5. -->
+This project makes the `campus_life` corpus of 88 short student posts
+searchable, covering topics such as courses, administrative deadlines, health
+services, campus jobs, dining, and housing. It divides each document into
+paragraph-sized chunks, repeats the document title for context, and retrieves
+the three chunks most closely related to a question. The system generates a
+brief answer using only the retrieved documents and names the source file it
+used. A relevance gate with a `0.6` cutoff refuses questions that the corpus
+does not contain enough information to answer.
 
 ## Chunking Strategy
 
@@ -137,33 +142,36 @@ all five out-of-scope questions were refused.
 
      Milestone 4. -->
 
-| Question | In corpus? | Best distance |
-|---|---|---|
-| How are lab problems used in the CS 210 exams? | Yes | 0.1865 |
-| What is the deadline for dropping a course? | Yes | 0.2597 |
-| What are the health center's walk-in hours? | Yes | 0.2120 |
-| Can students usually study during a library desk shift? | Yes | 0.3599 |
-| What is the best time to do laundry to avoid waiting for a washer or dryer? | Yes | 0.3115 |
-| What is the capital of Mongolia? | No | 0.7873 |
-| How do I change the oil in a diesel engine? | No | 0.9228 |
-| Who won the 1994 World Cup? | No | 0.8474 |
-| What is the recommended dosage of ibuprofen for a headache? | No | 0.8487 |
-| How do I write a for loop in Rust? | No | 0.8598 |
+| Question                                                                    | In corpus? | Best distance |
+| --------------------------------------------------------------------------- | ---------- | ------------- |
+| How are lab problems used in the CS 210 exams?                              | Yes        | 0.1865        |
+| What is the deadline for dropping a course?                                 | Yes        | 0.2597        |
+| What are the health center's walk-in hours?                                 | Yes        | 0.2120        |
+| Can students usually study during a library desk shift?                     | Yes        | 0.3599        |
+| What is the best time to do laundry to avoid waiting for a washer or dryer? | Yes        | 0.3115        |
+| What is the capital of Mongolia?                                            | No         | 0.7873        |
+| How do I change the oil in a diesel engine?                                 | No         | 0.9228        |
+| Who won the 1994 World Cup?                                                 | No         | 0.8474        |
+| What is the recommended dosage of ibuprofen for a headache?                 | No         | 0.8487        |
+| How do I write a for loop in Rust?                                          | No         | 0.8598        |
 
 ## How I Used AI
 
-<!-- Two specific moments. For each: what you asked for, what came back, and
-     what you changed about it.
+**1.** I asked AI to pressure-test my acceptance criteria rather than write
+them from scratch. My original chunking criterion required every chunk to be
+shorter than 300 characters, but I could not justify that number. The AI
+pointed out that tiny sentence fragments would still pass that test, so I
+changed the criterion to require that no chunk begin or end in the middle of a
+sentence, then used AI feedback to make the English precise and testable.
 
-     "I asked Claude to write the chunking function from my notes. It ignored
-     the overlap, so I added that myself" is the level of detail we're after.
-     "I used AI to help me code" is not.
-
-     Milestone 5. -->
-
-**1.**
-
-**2.**
+**2.** I asked AI whether splitting housing posts into sections such as “The
+good,” “The bad,” “Laundry,” and “Noise” would make the chunks lose their
+subject. After inspecting the pipeline, it explained that source metadata is
+shown to the answer model only after retrieval, while embeddings are created
+from the chunk text itself. I therefore changed the chunker to prepend the
+document title to every paragraph-sized chunk, then verified all 183 chunks
+used original paragraph boundaries and inspected sample chunks before keeping
+the strategy.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
@@ -190,13 +198,13 @@ all five out-of-scope questions were refused.
 
      Milestone 1. -->
 
-| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
-|---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| Criterion                              | Target | Run 1 | Run 2 | Run 3 | Verdict |
+| -------------------------------------- | ------ | ----- | ----- | ----- | ------- |
+| 1. Retrieved chunk contains the answer | 4 of 5 |       |       |       |         |
+| 2. Every answer names a source         | 5 of 5 |       |       |       |         |
+| 3. Gate stops out-of-corpus questions  | 4 of 5 |       |       |       |         |
+| 4.                                     |        |       |       |       |         |
+| 5.                                     |        |       |       |       |         |
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
@@ -213,13 +221,13 @@ all five out-of-scope questions were refused.
 
      Milestone 2. -->
 
-| # | Criterion | Verdict | How I decided |
-|---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| #   | Criterion | Verdict | How I decided |
+| --- | --------- | ------- | ------------- |
+| 1   |           |         |               |
+| 2   |           |         |               |
+| 3   |           |         |               |
+| 4   |           |         |               |
+| 5   |           |         |               |
 
 ## Diagnoses
 
@@ -255,13 +263,13 @@ all five out-of-scope questions were refused.
 <!-- Same format, same five criteria, three runs each.
      `python run_eval.py --label after` -->
 
-| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
-|---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| Criterion                              | Target | Run 1 | Run 2 | Run 3 | Verdict |
+| -------------------------------------- | ------ | ----- | ----- | ----- | ------- |
+| 1. Retrieved chunk contains the answer | 4 of 5 |       |       |       |         |
+| 2. Every answer names a source         | 5 of 5 |       |       |       |         |
+| 3. Gate stops out-of-corpus questions  | 4 of 5 |       |       |       |         |
+| 4.                                     |        |       |       |       |         |
+| 5.                                     |        |       |       |       |         |
 
 **Did it help?**
 
