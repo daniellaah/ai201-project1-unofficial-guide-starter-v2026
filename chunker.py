@@ -33,9 +33,9 @@ class Chunk:
     """One piece of one document."""
 
     text: str
-    source: str        # which file it came from
-    index: int         # which chunk within that file, starting at 0
-    produced_by: str   # the function that made it — cite this in your README
+    source: str  # which file it came from
+    index: int  # which chunk within that file, starting at 0
+    produced_by: str  # the function that made it — cite this in your README
 
     @property
     def label(self) -> str:
@@ -97,7 +97,29 @@ def split_documents(documents: list[Document]) -> list[Chunk]:
       - Would splitting on paragraph breaks keep more thoughts intact than
         splitting on a character count?
     """
-    return fallback_split(documents)
+    chunks: list[Chunk] = []
+    for doc in documents:
+        sections = [section.strip() for section in doc.text.split("\n\n")]
+        sections = [section for section in sections if section]
+        if not sections:
+            continue
+
+        title, *paragraphs = sections
+        if not paragraphs:
+            paragraphs = [title]
+
+        for index, paragraph in enumerate(paragraphs):
+            text = title if paragraph == title else f"{title}\n\n{paragraph}"
+            chunks.append(
+                Chunk(
+                    text=text,
+                    source=doc.source,
+                    index=index,
+                    produced_by="chunker.py::split_documents",
+                )
+            )
+
+    return chunks
 
 
 def describe(chunks: list[Chunk]) -> str:
