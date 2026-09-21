@@ -110,12 +110,23 @@ The good: cheapest housing tier by about $900 a year, and the singles are real s
 
 **Question:**
 
+What are the health center's walk-in hours?
+
 **Answer:**
 
 ```
+The health centre's walk-in hours are from 8am to 11am (health_center.txt).
+
+Sources retrieved: dining_the_atrium.txt, health_center.txt
 ```
 
-**My relevance cutoff:**
+**My relevance cutoff:** `0.6`
+
+The five in-corpus questions had best distances from `0.1865` to `0.3599`,
+while the five out-of-scope questions ranged from `0.7873` to `0.9228`. The
+gap between the two groups was `0.4274`, so I kept the `0.6` cutoff inside that
+gap. At this cutoff all five in-corpus questions passed the relevance gate and
+all five out-of-scope questions were refused.
 
 <!-- The number you set in config.py, and how you got there.
 
@@ -128,7 +139,16 @@ The good: cheapest housing tier by about $900 a year, and the singles are real s
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| How are lab problems used in the CS 210 exams? | Yes | 0.1865 |
+| What is the deadline for dropping a course? | Yes | 0.2597 |
+| What are the health center's walk-in hours? | Yes | 0.2120 |
+| Can students usually study during a library desk shift? | Yes | 0.3599 |
+| What is the best time to do laundry to avoid waiting for a washer or dryer? | Yes | 0.3115 |
+| What is the capital of Mongolia? | No | 0.7873 |
+| How do I change the oil in a diesel engine? | No | 0.9228 |
+| Who won the 1994 World Cup? | No | 0.8474 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.8487 |
+| How do I write a for loop in Rust? | No | 0.8598 |
 
 ## How I Used AI
 
